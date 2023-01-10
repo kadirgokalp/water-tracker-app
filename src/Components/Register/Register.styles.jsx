@@ -1,11 +1,17 @@
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
-	container: {
+	outerContainer: {
 		flex: 1,
+		backgroundColor: "#fff",
+		alignItems: "center",
 		justifyContent: "center",
 	},
 	innerContainer: {
+		flex: 1,
+		justifyContent: "center",
+	},
+	imageContainer: {
 		alignItems: "center",
 	},
 	pageTitle: {
@@ -19,7 +25,11 @@ export const styles = StyleSheet.create({
 		flexDirection: "row",
 		borderBottomColor: "#CCCCCC",
 		borderBottomWidth: 1,
-		paddingBottom: 8,
+		paddingBottom: 6,
 		marginBottom: 25,
+	},
+	icon: {
+		marginRight: 10,
+		marginTop: 4,
 	},
 })
