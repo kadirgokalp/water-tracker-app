@@ -3,33 +3,46 @@ import { StyleSheet } from "react-native"
 export const styles = StyleSheet.create({
 	outerContainer: {
 		flex: 1,
-		backgroundColor: "#fff",
-		alignItems: "center",
+		backgroundColor: "#00000011",
+	},
+	calendarContainer: {
+		height: "40%",
 		justifyContent: "center",
-	},
-	innerContainer: {
-		flex: 1,
-		justifyContent: "center",
-	},
-	imageContainer: {
 		alignItems: "center",
+		marginTop: 70,
 	},
-	pageTitle: {
-		fontSize: 28,
-		fontWeight: "500",
-		color: "#333333",
-		marginBottom: 30,
-		marginLeft: 50,
-	},
-	register: {
+	waterPercentageContainer: {
 		flexDirection: "row",
-		borderBottomColor: "#CCCCCC",
-		borderBottomWidth: 1,
-		paddingBottom: 8,
-		marginBottom: 25,
+	},
+	editWater: {
+		backgroundColor: "#0095FF",
+		height: 40,
+		marginTop: 20,
+		width: 40,
+		marginLeft: -10,
+		borderRadius: 10,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	editWaterText: {
+		color: "#FFFFFF",
+		fontSize: 20,
+		fontWeight: "500",
 	},
 	icon: {
 		marginRight: 10,
 		marginTop: 4,
+	},
+
+	dashboard: {
+		borderRadius: 10,
+		width: 300,
+	},
+	waterCardContainer: {
+		width: "100%",
+		height: 100,
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
 	},
 })
