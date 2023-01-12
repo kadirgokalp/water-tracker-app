@@ -38,6 +38,8 @@ export default function Goal({ navigation }) {
 					<TextInput placeholder="How many liters do you intend to drink today?" />
 				</View>
 
+				<CustomButton buttonTitle="CANCEL" color={"#AA0000"} />
+
 				<CustomButton
 					buttonTitle="GET STARTED"
 					onPress={handleNavigate}
