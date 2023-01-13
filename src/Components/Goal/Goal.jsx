@@ -12,10 +12,12 @@ import { styles } from "./Goal.styles"
 
 import CustomButton from "../Common/Button/CustomButton"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export default function Goal({ navigation }) {
 	function handleNavigate() {
 		navigation.navigate("Dashboard")
+		AsyncStorage.setItem("keepLoggedIn", JSON.stringify(false))
 	}
 	return (
 		<View style={styles.outerContainer}>

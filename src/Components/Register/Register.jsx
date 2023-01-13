@@ -14,8 +14,10 @@ import Icon from "react-native-vector-icons/FontAwesome"
 import AgeIcon from "react-native-vector-icons/Octicons"
 
 import CustomButton from "../Common/Button/CustomButton"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export default function Register({ navigation }) {
+	AsyncStorage.setItem("keepLoggedIn", JSON.stringify(true))
 	function handleNavigate() {
 		navigation.navigate("Goal")
 	}
