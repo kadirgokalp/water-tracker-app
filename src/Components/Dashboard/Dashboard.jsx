@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native"
-import { React, useState } from "react"
+import { React, useState, useEffect } from "react"
 import { styles } from "./Dashboard.styles"
 // import DateTimePicker from "@react-native-community/datetimepicker"
 import { Calendar } from "react-native-calendars"
@@ -14,6 +14,8 @@ const Dashboard = ({ navigation }) => {
 	const [modalVisible, setModalVisible] = useState(false)
 	const [userName, setUserName] = useState("")
 	const [userAge, setUserAge] = useState(0)
+
+	const [goal, setGoal] = useState(0)
 
 	const calendarTheme = {
 		calendarBackground: "#6C63FF",
@@ -42,8 +44,8 @@ const Dashboard = ({ navigation }) => {
 	}
 
 	function handleOnClickUserInfo() {
-		setUserName("Kadir Gokalp")
-		setUserAge(23)
+		// setUserName(nameStorage)
+		// setUserAge(ageStorage)
 		setModalVisible(true)
 	}
 
@@ -52,13 +54,18 @@ const Dashboard = ({ navigation }) => {
 		navigation.navigate("Register")
 	}
 
+	useEffect(() => {
+		AsyncStorage.getItem("userName").then((name) => setUserName(name))
+		AsyncStorage.getItem("age").then((age) => setUserAge(age))
+		AsyncStorage.getItem("goal").then((goal) => setGoal(goal))
+	}, [])
+
+	console.log("username : ", userName)
+
 	return (
 		<View style={styles.outerContainer}>
 			<View style={styles.userAvatar}>
-				<UserProfile
-					name={"Kadir Gokalp"}
-					onPress={handleOnClickUserInfo}
-				/>
+				<UserProfile name="Mustafa Ç" onPress={handleOnClickUserInfo} />
 			</View>
 			<View style={styles.calendarContainer}>
 				{/* MODAL */}
@@ -76,7 +83,7 @@ const Dashboard = ({ navigation }) => {
 				<WaterPercentage percentage={30} />
 
 				<TouchableOpacity style={styles.editWater}>
-					<Text style={styles.editWaterText}>5</Text>
+					<Text style={styles.editWaterText}>{goal}</Text>
 				</TouchableOpacity>
 			</View>
 			<View style={styles.waterCardContainer}>

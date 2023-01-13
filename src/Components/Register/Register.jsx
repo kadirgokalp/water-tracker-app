@@ -1,4 +1,4 @@
-import React from "react"
+import { React, useState, useEffect } from "react"
 import {
 	View,
 	Text,
@@ -17,10 +17,22 @@ import CustomButton from "../Common/Button/CustomButton"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export default function Register({ navigation }) {
+	const [userName, setUserName] = useState("")
+	const [age, setAge] = useState("")
+
 	AsyncStorage.setItem("keepLoggedIn", JSON.stringify(true))
 	function handleNavigate() {
 		navigation.navigate("Goal")
 	}
+
+	function handleOnRegister() {
+		AsyncStorage.setItem("userName", userName)
+		AsyncStorage.setItem("age", age)
+		handleNavigate()
+	}
+
+	// console.log("Name storage : ", nameStorage)
+	console.log("username in register : ", userName)
 
 	return (
 		<View style={styles.outerContainer}>
@@ -40,7 +52,11 @@ export default function Register({ navigation }) {
 						color="#333333"
 						style={styles.icon}
 					/>
-					<TextInput placeholder="Name :" />
+					<TextInput
+						value={userName}
+						onChangeText={setUserName}
+						placeholder="Name :"
+					/>
 				</View>
 
 				<View style={styles.register}>
@@ -50,9 +66,16 @@ export default function Register({ navigation }) {
 						color="#333333"
 						style={styles.icon}
 					/>
-					<TextInput placeholder="Age :" />
+					<TextInput
+						placeholder="Age :"
+						value={age}
+						onChangeText={setAge}
+					/>
 				</View>
-				<CustomButton buttonTitle="REGISTER" onPress={handleNavigate} />
+				<CustomButton
+					buttonTitle="REGISTER"
+					onPress={handleOnRegister}
+				/>
 			</SafeAreaView>
 		</View>
 	)

@@ -21,7 +21,7 @@ export default function CustomModal({
 			<View style={styles.outerContainer}>
 				<View style={styles.modalContainer}>
 					<Text style={styles.modalText}>
-						{`Welcome , ${userName} (${userAge})`}{" "}
+						{`Welcome , ${userName} (${userAge})`}
 					</Text>
 					<Pressable
 						style={styles.button}

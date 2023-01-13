@@ -1,4 +1,4 @@
-import React from "react"
+import { React, useState, useEffect } from "react"
 import {
 	View,
 	Text,
@@ -15,10 +15,17 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export default function Goal({ navigation }) {
+	const [goal, setGoal] = useState("")
+
 	function handleNavigate() {
-		navigation.navigate("Dashboard")
+		AsyncStorage.setItem("goal", goal)
 		AsyncStorage.setItem("keepLoggedIn", JSON.stringify(false))
+		navigation.navigate("Dashboard")
 	}
+
+	useEffect(() => {
+		AsyncStorage.getItem("goal").then((goal) => setGoal(goal))
+	}, [])
 	return (
 		<View style={styles.outerContainer}>
 			<SafeAreaView style={styles.innerContainer}>
@@ -37,7 +44,11 @@ export default function Goal({ navigation }) {
 						color="#333333"
 						style={styles.icon}
 					/>
-					<TextInput placeholder="How many liters do you intend to drink today?" />
+					<TextInput
+						value={goal}
+						onChangeText={setGoal}
+						placeholder="How many liters do you intend to drink today?"
+					/>
 				</View>
 
 				<CustomButton buttonTitle="CANCEL" color={"#AA0000"} />
