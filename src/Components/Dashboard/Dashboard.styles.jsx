@@ -6,10 +6,9 @@ export const styles = StyleSheet.create({
 		backgroundColor: "#00000011",
 	},
 	calendarContainer: {
-		height: "40%",
 		justifyContent: "center",
 		alignItems: "center",
-		marginTop: 70,
+		marginTop: 20,
 	},
 	waterPercentageContainer: {
 		flexDirection: "row",
@@ -44,5 +43,11 @@ export const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
+	},
+	userAvatar: {
+		alignItems: "flex-end",
+		justifyContent: "flex-end",
+		marginTop: 60,
+		marginRight: 20,
 	},
 })

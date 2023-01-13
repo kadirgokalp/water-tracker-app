@@ -5,8 +5,16 @@ import { styles } from "./Dashboard.styles"
 import { Calendar } from "react-native-calendars"
 import WaterCard from "./WaterCard/WaterCard"
 import WaterPercentage from "./WaterPercentage/WaterPercentage"
+import UserProfile from "./UserProfile/UserProfile"
+import CustomModal from "./CustomModal/CustomModal"
+import CustomButton from "../Common/Button/CustomButton"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
-const Dashboard = () => {
+const Dashboard = ({ navigation }) => {
+	const [modalVisible, setModalVisible] = useState(false)
+	const [userName, setUserName] = useState("")
+	const [userAge, setUserAge] = useState(0)
+
 	const calendarTheme = {
 		calendarBackground: "#6C63FF",
 		textSectionTitleColor: "#b6c1cd",
@@ -33,9 +41,35 @@ const Dashboard = () => {
 		textDayHeaderFontSize: 16,
 	}
 
+	function handleOnClickUserInfo() {
+		setUserName("Kadir Gokalp")
+		setUserAge(23)
+		setModalVisible(true)
+	}
+
+	function handleLogout() {
+		AsyncStorage.setItem("keepLoggedIn", JSON.stringify(false))
+		navigation.navigate("Register")
+	}
+
 	return (
 		<View style={styles.outerContainer}>
+			<View style={styles.userAvatar}>
+				<UserProfile
+					name={"Kadir Gokalp"}
+					onPress={handleOnClickUserInfo}
+				/>
+			</View>
 			<View style={styles.calendarContainer}>
+				{/* MODAL */}
+
+				<CustomModal
+					userName={userName}
+					userAge={userAge}
+					modalVisible={modalVisible}
+					setModalVisible={setModalVisible}
+				/>
+
 				<Calendar theme={calendarTheme} style={styles.dashboard} />
 			</View>
 			<View style={styles.waterPercentageContainer}>
@@ -51,6 +85,11 @@ const Dashboard = () => {
 				<WaterCard title={"750 mL"} />
 				<WaterCard title={"1 L"} />
 			</View>
+			<CustomButton
+				buttonTitle={"LOGOUT"}
+				onPress={handleLogout}
+				color={"#FF0000"}
+			/>
 		</View>
 	)
 }
