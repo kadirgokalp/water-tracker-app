@@ -9,13 +9,27 @@ import UserProfile from "./UserProfile/UserProfile"
 import CustomModal from "./CustomModal/CustomModal"
 import CustomButton from "../Common/Button/CustomButton"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import EditIcon from "react-native-vector-icons/FontAwesome"
+import { color } from "@rneui/themed/dist/config"
 
 const Dashboard = ({ navigation }) => {
 	const [modalVisible, setModalVisible] = useState(false)
 	const [userName, setUserName] = useState("")
 	const [userAge, setUserAge] = useState(0)
+	const [extraButton, setExtraButton] = useState(false)
+	const [modalText, setModalText] = useState("")
+	const [isDisabled, setIsDisabled] = useState(true)
+	const [waterCardClicked, setWaterCardClicked] = useState([
+		false,
+		false,
+		false,
+		false,
+	])
+	const [sumLiters, setSumLiters] = useState(0)
+	const [drankAlready, setDrankAlready] = useState(0)
 
-	const [goal, setGoal] = useState(0)
+	const [goal, setGoal] = useState("")
+	const [waterPercentage, setWaterPercentage] = useState(0)
 
 	const calendarTheme = {
 		calendarBackground: "#6C63FF",
@@ -46,7 +60,9 @@ const Dashboard = ({ navigation }) => {
 	function handleOnClickUserInfo() {
 		// setUserName(nameStorage)
 		// setUserAge(ageStorage)
+		setExtraButton(false)
 		setModalVisible(true)
+		setModalText(`Welcome , ${userName} (${userAge})`)
 	}
 
 	function handleLogout() {
@@ -54,49 +70,128 @@ const Dashboard = ({ navigation }) => {
 		navigation.navigate("Register")
 	}
 
+	function handleOnEditIconNavigation() {
+		navigation.navigate("Goal")
+	}
+
+	function handleOnEditIcon() {
+		setExtraButton({
+			buttonTitle: "EDIT",
+			onPress: handleOnEditIconNavigation,
+		})
+		setModalText(`Your goal is : ${goal} liters `)
+		setModalVisible(true)
+	}
+
+	function handleOnClickWaterCard(index, waterAmount) {
+		let tempSum = sumLiters
+		let tempClicked = [...waterCardClicked]
+		if (!tempClicked[index]) {
+			tempSum += waterAmount
+		} else {
+			tempSum -= waterAmount
+		}
+
+		// if (tempSum > 0) {
+		// 	setIsDisabled(!isDisabled)
+		// }
+
+		tempClicked[index] = !tempClicked[index]
+		setSumLiters(tempSum)
+		setWaterCardClicked(tempClicked)
+	}
+
+	function handleOnAddMlButton(sumLiters) {
+		let tempDrankAlready = drankAlready
+		tempDrankAlready += sumLiters
+
+		setDrankAlready(tempDrankAlready)
+
+		let percentage = (tempDrankAlready / (goal * 1000)) * 100
+		setWaterPercentage(percentage)
+
+		setSumLiters(0)
+		setWaterCardClicked([false, false, false, false])
+		console.log("sumLiters :", sumLiters)
+	}
 	useEffect(() => {
 		AsyncStorage.getItem("userName").then((name) => setUserName(name))
 		AsyncStorage.getItem("age").then((age) => setUserAge(age))
 		AsyncStorage.getItem("goal").then((goal) => setGoal(goal))
 	}, [])
 
+	// useEffect(() => {
+	// 	AsyncStorage.getItem("goal").then((goal) => setGoal(goal))
+	// }, [goal])
+
 	console.log("username : ", userName)
+	console.log(waterPercentage)
+	console.log("sumLiters :", sumLiters)
 
 	return (
 		<View style={styles.outerContainer}>
 			<View style={styles.userAvatar}>
-				<UserProfile name="Mustafa Ç" onPress={handleOnClickUserInfo} />
+				<UserProfile name={userName} onPress={handleOnClickUserInfo} />
 			</View>
-			<View style={styles.calendarContainer}>
-				{/* MODAL */}
+			<View style={styles.innerContainer}>
+				<View style={styles.calendarContainer}>
+					{/* MODAL */}
 
-				<CustomModal
-					userName={userName}
-					userAge={userAge}
-					modalVisible={modalVisible}
-					setModalVisible={setModalVisible}
+					<CustomModal
+						userName={userName}
+						userAge={userAge}
+						modalVisible={modalVisible}
+						setModalVisible={setModalVisible}
+						extraButton={extraButton}
+						modalText={modalText}
+					/>
+
+					<Calendar theme={calendarTheme} style={styles.dashboard} />
+				</View>
+				<View style={styles.waterPercentageContainer}>
+					<WaterPercentage percentage={waterPercentage} />
+
+					<TouchableOpacity
+						style={styles.editWater}
+						onPress={handleOnEditIcon}
+					>
+						<EditIcon
+							name="edit"
+							size={16}
+							style={{
+								paddingRight: 5,
+								color: "#FFFFFF",
+								paddingTop: 3,
+							}}
+						/>
+						<Text style={styles.editWaterText}>{goal}</Text>
+					</TouchableOpacity>
+				</View>
+				<View style={styles.waterCardContainer}>
+					<WaterCard
+						title={"200 mL"}
+						onPress={() => handleOnClickWaterCard(0, 200)}
+					/>
+					<WaterCard
+						title={"500 mL"}
+						onPress={() => handleOnClickWaterCard(1, 500)}
+					/>
+					<WaterCard
+						title={"750 mL"}
+						onPress={() => handleOnClickWaterCard(2, 750)}
+					/>
+					<WaterCard
+						title={"1 L"}
+						onPress={() => handleOnClickWaterCard(3, 1000)}
+					/>
+				</View>
+				<CustomButton
+					buttonTitle={`+ Add ${sumLiters} ml`}
+					onPress={() => handleOnAddMlButton(sumLiters)}
+					color={"#0d7ff0"}
+					isDisabled={sumLiters > 0 ? false : true}
 				/>
-
-				<Calendar theme={calendarTheme} style={styles.dashboard} />
 			</View>
-			<View style={styles.waterPercentageContainer}>
-				<WaterPercentage percentage={30} />
-
-				<TouchableOpacity style={styles.editWater}>
-					<Text style={styles.editWaterText}>{goal}</Text>
-				</TouchableOpacity>
-			</View>
-			<View style={styles.waterCardContainer}>
-				<WaterCard title={"200 mL"} />
-				<WaterCard title={"500 mL"} />
-				<WaterCard title={"750 mL"} />
-				<WaterCard title={"1 L"} />
-			</View>
-			<CustomButton
-				buttonTitle={"LOGOUT"}
-				onPress={handleLogout}
-				color={"#FF0000"}
-			/>
 		</View>
 	)
 }

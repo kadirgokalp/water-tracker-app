@@ -5,23 +5,31 @@ export const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#00000011",
 	},
+	innerContainer: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
 	calendarContainer: {
 		justifyContent: "center",
 		alignItems: "center",
-		marginTop: 20,
+		// marginTop: 20,
 	},
 	waterPercentageContainer: {
 		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
 	},
 	editWater: {
 		backgroundColor: "#0095FF",
 		height: 40,
-		marginTop: 20,
+		// marginTop: 20,
 		width: 40,
 		marginLeft: -10,
 		borderRadius: 10,
 		justifyContent: "center",
 		alignItems: "center",
+		flexDirection: "row",
 	},
 	editWaterText: {
 		color: "#FFFFFF",

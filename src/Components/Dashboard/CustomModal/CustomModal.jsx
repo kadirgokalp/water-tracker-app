@@ -9,6 +9,8 @@ export default function CustomModal({
 	userAge,
 	modalVisible,
 	setModalVisible,
+	extraButton,
+	modalText,
 }) {
 	return (
 		<Modal
@@ -20,15 +22,25 @@ export default function CustomModal({
 		>
 			<View style={styles.outerContainer}>
 				<View style={styles.modalContainer}>
-					<Text style={styles.modalText}>
-						{`Welcome , ${userName} (${userAge})`}
-					</Text>
-					<Pressable
-						style={styles.button}
-						onPress={() => setModalVisible(!modalVisible)}
-					>
-						<Text style={styles.modalText}>OK</Text>
-					</Pressable>
+					<Text style={styles.modalText}>{modalText}</Text>
+					<View style={styles.buttonContainer}>
+						<Pressable
+							style={styles.button}
+							onPress={() => setModalVisible(!modalVisible)}
+						>
+							<Text style={styles.modalText}>CLOSE</Text>
+						</Pressable>
+						{extraButton && (
+							<Pressable
+								style={[styles.button, styles.newButton]}
+								onPress={extraButton.onPress}
+							>
+								<Text style={styles.modalText}>
+									{extraButton.buttonTitle}
+								</Text>
+							</Pressable>
+						)}
+					</View>
 				</View>
 			</View>
 		</Modal>
