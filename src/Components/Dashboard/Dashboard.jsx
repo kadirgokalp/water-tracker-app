@@ -8,9 +8,11 @@ import WaterPercentage from "./WaterPercentage/WaterPercentage"
 import UserProfile from "./UserProfile/UserProfile"
 import CustomModal from "./CustomModal/CustomModal"
 import CustomButton from "../Common/Button/CustomButton"
+import TodaysDate from "./TodaysDate/TodaysDate"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import EditIcon from "react-native-vector-icons/FontAwesome"
 import { color } from "@rneui/themed/dist/config"
+import { todayFormattedDate } from "../../Utils/TodaysFormattedDate"
 
 const Dashboard = ({ navigation }) => {
 	const [modalVisible, setModalVisible] = useState(false)
@@ -30,16 +32,17 @@ const Dashboard = ({ navigation }) => {
 
 	const [goal, setGoal] = useState("")
 	const [waterPercentage, setWaterPercentage] = useState(0)
+	const [markedDates, setMarkedDates] = useState({})
 
 	const calendarTheme = {
-		calendarBackground: "#6C63FF",
+		calendarBackground: "#10006d",
 		textSectionTitleColor: "#b6c1cd",
 		textSectionTitleDisabledColor: "#d9e1e8",
 		selectedDayBackgroundColor: "##4e54c8",
 		selectedDayTextColor: "#ffffff",
-		todayTextColor: "#c53cb0",
-		dayTextColor: "#2d4150",
-		textDisabledColor: "#d9e1e8",
+		todayTextColor: "#b5229f",
+		dayTextColor: "#ffffff",
+		textDisabledColor: "#606468",
 		dotColor: "##4e54c8r",
 		selectedDotColor: "#ffffff",
 		arrowColor: "orange",
@@ -56,6 +59,8 @@ const Dashboard = ({ navigation }) => {
 		textMonthFontSize: 16,
 		textDayHeaderFontSize: 16,
 	}
+
+	const today = todayFormattedDate()
 
 	function handleOnClickUserInfo() {
 		// setUserName(nameStorage)
@@ -102,6 +107,8 @@ const Dashboard = ({ navigation }) => {
 	}
 
 	function handleOnAddMlButton(sumLiters) {
+		if (goal !== 0) {
+		}
 		let tempDrankAlready = drankAlready
 		tempDrankAlready += sumLiters
 
@@ -113,11 +120,29 @@ const Dashboard = ({ navigation }) => {
 		setSumLiters(0)
 		setWaterCardClicked([false, false, false, false])
 		console.log("sumLiters :", sumLiters)
+
+		AsyncStorage.setItem(today, `${tempDrankAlready}`)
+
+		if (tempDrankAlready >= goal) {
+			let tempMarkedDates = markedDates ? markedDates : {}
+			tempMarkedDates[today] = {}
+			console.log("copyofMarked:", tempMarkedDates)
+			setMarkedDates(tempMarkedDates)
+			AsyncStorage.setItem("markedDates", JSON.stringify(tempMarkedDates))
+		}
 	}
 	useEffect(() => {
 		AsyncStorage.getItem("userName").then((name) => setUserName(name))
 		AsyncStorage.getItem("age").then((age) => setUserAge(age))
 		AsyncStorage.getItem("goal").then((goal) => setGoal(goal))
+
+		AsyncStorage.getItem("markedDates").then((dates) =>
+			console.log(
+				"marked dates",
+				JSON.parse(dates),
+				setMarkedDates(JSON.parse(dates)),
+			),
+		)
 	}, [])
 
 	// useEffect(() => {
@@ -146,10 +171,18 @@ const Dashboard = ({ navigation }) => {
 						modalText={modalText}
 					/>
 
-					<Calendar theme={calendarTheme} style={styles.dashboard} />
+					<Calendar
+						theme={calendarTheme}
+						style={styles.dashboard}
+						dayComponent={TodaysDate}
+						markedDates={markedDates}
+					/>
 				</View>
 				<View style={styles.waterPercentageContainer}>
-					<WaterPercentage percentage={waterPercentage} />
+					<WaterPercentage
+						percentage={waterPercentage}
+						amount={drankAlready}
+					/>
 
 					<TouchableOpacity
 						style={styles.editWater}
