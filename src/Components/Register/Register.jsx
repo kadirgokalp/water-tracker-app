@@ -1,4 +1,7 @@
+// React
 import { React, useState, useEffect } from "react"
+
+// React Native
 import {
 	View,
 	Text,
@@ -8,13 +11,17 @@ import {
 	TextInput,
 	TouchableOpacity,
 } from "react-native"
-import { styles } from "./Register.styles"
-import PageTitle from "../../Components/Common/PageTitle/PageTitle"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+
+// Library
 import Icon from "react-native-vector-icons/FontAwesome"
 import AgeIcon from "react-native-vector-icons/Octicons"
 
+// Style
+import { styles } from "./Register.styles"
+
+// Common Components
 import CustomButton from "../Common/Button/CustomButton"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export default function Register({ navigation }) {
 	const [userName, setUserName] = useState("")

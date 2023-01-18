@@ -1,5 +1,8 @@
-import { View, Text } from "react-native"
+// React
 import React from "react"
+// React Native
+import { View, Text } from "react-native"
+// Style
 import { styles } from "./WaterPercentage.styles"
 
 export default function WaterPercentage({ percentage, amount, color }) {

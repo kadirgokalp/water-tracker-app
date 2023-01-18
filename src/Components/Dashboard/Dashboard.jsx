@@ -1,28 +1,41 @@
-import { View, Text, TouchableOpacity } from "react-native"
+// React
 import { React, useState, useEffect } from "react"
-import { styles } from "./Dashboard.styles"
-// import DateTimePicker from "@react-native-community/datetimepicker"
+
+// React Native
+import { View, Text, TouchableOpacity } from "react-native"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { useIsFocused } from "@react-navigation/native"
+
+// Library
+import EditIcon from "react-native-vector-icons/FontAwesome"
 import { Calendar } from "react-native-calendars"
+
+// Style
+import { styles } from "./Dashboard.styles"
+
+// Utilities,
+import { todayFormattedDate } from "../../Utils/TodaysFormattedDate"
+
+//Config
+import { COLOR } from "../../Config/Enums"
+
+// Common Components
+import CustomButton from "../Common/Button/CustomButton"
+
+// Component
 import WaterCard from "./WaterCard/WaterCard"
 import WaterPercentage from "./WaterPercentage/WaterPercentage"
 import UserProfile from "./UserProfile/UserProfile"
 import CustomModal from "./CustomModal/CustomModal"
-import CustomButton from "../Common/Button/CustomButton"
 import TodaysDate from "./TodaysDate/TodaysDate"
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import EditIcon from "react-native-vector-icons/FontAwesome"
-import { useIsFocused } from "@react-navigation/native"
-
-import { todayFormattedDate } from "../../Utils/TodaysFormattedDate"
-import { COLOR } from "../../Config/Enums"
 
 const Dashboard = ({ navigation }) => {
+	// useState
 	const [modalVisible, setModalVisible] = useState(false)
 	const [userName, setUserName] = useState("")
 	const [userAge, setUserAge] = useState(0)
 	const [extraButton, setExtraButton] = useState(false)
 	const [modalText, setModalText] = useState("")
-	const [isDisabled, setIsDisabled] = useState(true)
 	const [waterCardClicked, setWaterCardClicked] = useState([
 		false,
 		false,
@@ -31,12 +44,15 @@ const Dashboard = ({ navigation }) => {
 	])
 	const [sumLiters, setSumLiters] = useState(0)
 	const [drankAlready, setDrankAlready] = useState(0)
-
 	const [goal, setGoal] = useState("")
 	const [waterPercentage, setWaterPercentage] = useState(0)
 	const [markedDates, setMarkedDates] = useState({})
-
 	const [isGoalDone, setIsGoalDone] = useState(false)
+
+	//useIsFocused
+	const isFocused = useIsFocused()
+
+	// Definition
 
 	const calendarTheme = {
 		calendarBackground: "#10006d",
@@ -66,7 +82,23 @@ const Dashboard = ({ navigation }) => {
 
 	const today = todayFormattedDate()
 
-	const isFocused = useIsFocused()
+	// useEffect
+
+	useEffect(() => {
+		AsyncStorage.getItem("userName").then((name) => setUserName(name))
+		AsyncStorage.getItem("age").then((age) => setUserAge(age))
+		AsyncStorage.getItem("goal").then((goal) => setGoal(goal))
+
+		AsyncStorage.getItem("markedDates").then((dates) =>
+			console.log(
+				"marked dates",
+				JSON.parse(dates),
+				setMarkedDates(JSON.parse(dates)),
+			),
+		)
+	}, [isFocused])
+
+	// Function
 
 	function handleOnClickUserInfo() {
 		// setUserName(nameStorage)
@@ -103,10 +135,6 @@ const Dashboard = ({ navigation }) => {
 			tempSum -= waterAmount
 		}
 
-		// if (tempSum > 0) {
-		// 	setIsDisabled(!isDisabled)
-		// }
-
 		tempClicked[index] = !tempClicked[index]
 		setSumLiters(tempSum)
 		setWaterCardClicked(tempClicked)
@@ -141,27 +169,6 @@ const Dashboard = ({ navigation }) => {
 			}
 		}
 	}
-	useEffect(() => {
-		AsyncStorage.getItem("userName").then((name) => setUserName(name))
-		AsyncStorage.getItem("age").then((age) => setUserAge(age))
-		AsyncStorage.getItem("goal").then((goal) => setGoal(goal))
-
-		AsyncStorage.getItem("markedDates").then((dates) =>
-			console.log(
-				"marked dates",
-				JSON.parse(dates),
-				setMarkedDates(JSON.parse(dates)),
-			),
-		)
-	}, [isFocused])
-
-	// useEffect(() => {
-	// 	AsyncStorage.getItem("goal").then((goal) => setGoal(goal))
-	// }, [goal])
-
-	console.log("username : ", userName)
-	console.log(waterPercentage)
-	console.log("sumLiters :", sumLiters)
 
 	return (
 		<View style={styles.outerContainer}>

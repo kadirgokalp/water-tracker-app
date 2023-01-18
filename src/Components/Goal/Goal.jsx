@@ -1,31 +1,35 @@
+//React
 import { React, useState, useEffect } from "react"
-import {
-	View,
-	Text,
-	StyleSheet,
-	Image,
-	SafeAreaView,
-	TextInput,
-	TouchableOpacity,
-} from "react-native"
-import { styles } from "./Goal.styles"
 
-import CustomButton from "../Common/Button/CustomButton"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+// React Native
+import { View, Text, Image, SafeAreaView, TextInput } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
+// Library
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+
+// Style
+import { styles } from "./Goal.styles"
+
+// Common Components
+import CustomButton from "../Common/Button/CustomButton"
+
 export default function Goal({ navigation }) {
+	// useState
 	const [goal, setGoal] = useState("")
 
+	// useEffect
+	useEffect(() => {
+		AsyncStorage.getItem("goal").then((goal) => setGoal(goal))
+	}, [])
+
+	// Function
 	function handleNavigate() {
 		AsyncStorage.setItem("goal", goal)
 		AsyncStorage.setItem("keepLoggedIn", JSON.stringify(false))
 		navigation.navigate("Dashboard")
 	}
 
-	useEffect(() => {
-		AsyncStorage.getItem("goal").then((goal) => setGoal(goal))
-	}, [])
 	return (
 		<View style={styles.outerContainer}>
 			<SafeAreaView style={styles.innerContainer}>

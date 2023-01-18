@@ -1,6 +1,10 @@
-import { TouchableOpacity, Text } from "react-native"
+// React
 import React from "react"
+// React Native
+import { TouchableOpacity, Text } from "react-native"
+// Library
 import CheckIcon from "react-native-vector-icons/Feather"
+// Component
 import { todayFormattedDate } from "../../../Utils/TodaysFormattedDate"
 
 export default function TodaysDate({ date, state, marking }) {
