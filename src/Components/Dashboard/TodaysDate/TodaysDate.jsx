@@ -31,6 +31,7 @@ export default function TodaysDate({ date, state, marking }) {
 					}}
 					style={{
 						fontWeight: "bold",
+						position: "absolute",
 					}}
 				/>
 			)}

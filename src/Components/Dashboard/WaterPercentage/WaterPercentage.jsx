@@ -2,7 +2,7 @@ import { View, Text } from "react-native"
 import React from "react"
 import { styles } from "./WaterPercentage.styles"
 
-export default function WaterPercentage({ percentage, amount }) {
+export default function WaterPercentage({ percentage, amount, color }) {
 	return (
 		<View style={styles.container}>
 			<Text
@@ -17,7 +17,11 @@ export default function WaterPercentage({ percentage, amount }) {
 				{`%${percentage} Done | ${amount} ml`}
 			</Text>
 			<View
-				style={[styles.innerContainer, { width: percentage + "%" }]}
+				style={[
+					styles.innerContainer,
+					{ width: percentage + "%" },
+					{ backgroundColor: color },
+				]}
 			></View>
 		</View>
 	)

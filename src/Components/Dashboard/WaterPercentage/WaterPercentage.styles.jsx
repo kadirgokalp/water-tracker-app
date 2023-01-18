@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
 		borderRadius: 10,
 	},
 	innerContainer: {
-		backgroundColor: "#0026FF",
+		// backgroundColor: "#0026FF",
 		borderRadius: 10,
 		padding: 3,
 		justifyContent: "center",

@@ -11,8 +11,10 @@ import CustomButton from "../Common/Button/CustomButton"
 import TodaysDate from "./TodaysDate/TodaysDate"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import EditIcon from "react-native-vector-icons/FontAwesome"
-import { color } from "@rneui/themed/dist/config"
+import { useIsFocused } from "@react-navigation/native"
+
 import { todayFormattedDate } from "../../Utils/TodaysFormattedDate"
+import { COLOR } from "../../Config/Enums"
 
 const Dashboard = ({ navigation }) => {
 	const [modalVisible, setModalVisible] = useState(false)
@@ -33,6 +35,8 @@ const Dashboard = ({ navigation }) => {
 	const [goal, setGoal] = useState("")
 	const [waterPercentage, setWaterPercentage] = useState(0)
 	const [markedDates, setMarkedDates] = useState({})
+
+	const [isGoalDone, setIsGoalDone] = useState(false)
 
 	const calendarTheme = {
 		calendarBackground: "#10006d",
@@ -61,6 +65,8 @@ const Dashboard = ({ navigation }) => {
 	}
 
 	const today = todayFormattedDate()
+
+	const isFocused = useIsFocused()
 
 	function handleOnClickUserInfo() {
 		// setUserName(nameStorage)
@@ -108,27 +114,31 @@ const Dashboard = ({ navigation }) => {
 
 	function handleOnAddMlButton(sumLiters) {
 		if (goal !== 0) {
-		}
-		let tempDrankAlready = drankAlready
-		tempDrankAlready += sumLiters
+			let tempDrankAlready = drankAlready
+			tempDrankAlready += sumLiters
 
-		setDrankAlready(tempDrankAlready)
+			setDrankAlready(tempDrankAlready)
 
-		let percentage = (tempDrankAlready / (goal * 1000)) * 100
-		setWaterPercentage(percentage)
+			let percentage = (tempDrankAlready / (goal * 1000)) * 100
+			setWaterPercentage(percentage)
 
-		setSumLiters(0)
-		setWaterCardClicked([false, false, false, false])
-		console.log("sumLiters :", sumLiters)
+			setSumLiters(0)
+			setWaterCardClicked([false, false, false, false])
+			console.log("sumLiters :", sumLiters)
 
-		AsyncStorage.setItem(today, `${tempDrankAlready}`)
+			AsyncStorage.setItem(today, `${tempDrankAlready}`)
 
-		if (tempDrankAlready >= goal) {
-			let tempMarkedDates = markedDates ? markedDates : {}
-			tempMarkedDates[today] = {}
-			console.log("copyofMarked:", tempMarkedDates)
-			setMarkedDates(tempMarkedDates)
-			AsyncStorage.setItem("markedDates", JSON.stringify(tempMarkedDates))
+			if (percentage >= 100) {
+				let tempMarkedDates = markedDates ? markedDates : {}
+				tempMarkedDates[today] = {}
+				console.log("copyofMarked:", tempMarkedDates)
+				setMarkedDates(tempMarkedDates)
+				setIsGoalDone(true)
+				AsyncStorage.setItem(
+					"markedDates",
+					JSON.stringify(tempMarkedDates),
+				)
+			}
 		}
 	}
 	useEffect(() => {
@@ -143,7 +153,7 @@ const Dashboard = ({ navigation }) => {
 				setMarkedDates(JSON.parse(dates)),
 			),
 		)
-	}, [])
+	}, [isFocused])
 
 	// useEffect(() => {
 	// 	AsyncStorage.getItem("goal").then((goal) => setGoal(goal))
@@ -182,6 +192,7 @@ const Dashboard = ({ navigation }) => {
 					<WaterPercentage
 						percentage={waterPercentage}
 						amount={drankAlready}
+						color={isGoalDone ? COLOR.RED : COLOR.DARK_BLUE}
 					/>
 
 					<TouchableOpacity
